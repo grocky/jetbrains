@@ -1,0 +1,26 @@
+{
+  "name": "jetbrains",
+  "version": "0.0.1",
+  "description": "Open Jetbrains IDEs from the command line",
+  "main": "index.js",
+  "bin": {
+    "jetbrains": "index.js"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "jetbrains",
+    "ide"
+  ],
+  "author": "Rocky Gray <rocky.grayjr@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  },
+  "dependencies": {
+    "colors": "^1.1.2",
+    "commander": "^2.9.0",
+    "lodash": "^3.10.1"
+  }
+}

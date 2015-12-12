@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+'use strict';
+
+var commander = require('commander');
+
+var jetbrains = require('../');
+
+var script = commander
+    .version('0.0.1')
+    .description('open a project using a JetBrains IDE')
+    .arguments('[directory]')
+    .parse(process.argv);
+
+var directory = script.args[0];
+
+if (typeof directory === 'undefined' || directory === '.') {
+    directory = process.cwd();
+}
+
+jetbrains.openByDirectory(directory);
