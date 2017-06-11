@@ -1,5 +1,5 @@
 {
-  "name": "jetbrains",
+  "name": "jetbrains-open",
   "version": "0.0.1",
   "description": "Open Jetbrains IDEs from the command line",
   "main": "index.js",
@@ -14,7 +14,7 @@
     "ide"
   ],
   "author": "Rocky Gray <rocky.grayjr@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "^2.3.4"
   },
