@@ -2,6 +2,11 @@
   "name": "jetbrains-open",
   "version": "0.0.1",
   "description": "Open Jetbrains IDEs from the command line",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/grocky/jetbrains.git"
+  },
+  "os" : [ "!win32" ],
   "main": "index.js",
   "bin": {
     "jetbrains": "index.js"
