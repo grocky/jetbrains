@@ -1,6 +1,6 @@
 ### Node template
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 
@@ -9,4 +9,5 @@ pids
 *.pid
 *.seed
 
-node_modules
+node_modules/
+out/
