@@ -3,7 +3,7 @@
 
 var commander = require('commander');
 
-var jetbrains = require('../');
+var jetbrains = require('../src');
 
 var script = commander
     .version('0.0.1')
