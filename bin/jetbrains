@@ -3,7 +3,7 @@
 
 var commander = require('commander');
 
-var jetbrains = require('../src');
+var openJetbrainsIde = require('../src/index');
 
 var script = commander
     .version('0.0.1')
@@ -17,4 +17,4 @@ if (typeof directory === 'undefined' || directory === '.') {
     directory = process.cwd();
 }
 
-jetbrains.openByDirectory(directory);
+openJetbrainsIde(directory);

@@ -1,32 +1,20 @@
-'use strict';
+module.exports = openJetbrainsIde;
 
-var _ = require('lodash');
-var exec = require('child_process').exec;
-var fs = require('fs');
+function openJetbrainsIde(directory) {
 
-var webStormFiles = ['package.json', 'bower.json', 'gulpfile.json', 'gruntfile.json'];
-var phpStormFiles = ['composer.json'];
-var projectFilePatterns = [/pom\.xml/, /\.ipr/, /build\.xml/];
+    const _ = require('lodash');
+    const fs = require('fs');
 
-module.exports = {
-    openByDirectory: openByDirectory
-};
+    const webStormFiles = ['package.json', 'bower.json', 'gulpfile.json', 'gruntfile.json'];
+    const phpStormFiles = ['composer.json'];
 
-function openByDirectory(directory) {
+    fs.readdir(directory, (err, items) => {
 
-    fs.readdir(directory, function(err, items) {
-        var hasWebstormFiles = _.intersection(items, webStormFiles).length > 0;
-        var hasPhpStormFiles = _.intersection(items, phpStormFiles).length > 0;
+        const projectFile = _.find(items, isProjectFile);
+        const hasWebstormFiles = _.intersection(items, webStormFiles).length > 0;
+        const hasPhpStormFiles = _.intersection(items, phpStormFiles).length > 0;
 
-        var project = _.find(items, function(item) {
-            var hasProjectFile = false;
-            _.each(projectFilePatterns, function(pattern) {
-                hasProjectFile = hasProjectFile || pattern.test(item);
-            });
-            return hasProjectFile;
-        });
-
-        var appName = '';
+        let appName = '';
         if (hasPhpStormFiles) {
             appName = 'PhpStorm';
         } else if (hasWebstormFiles) {
@@ -35,57 +23,55 @@ function openByDirectory(directory) {
             appName = 'IntelliJ';
         }
 
-        getJetBrainsApp(appName, project, openByApplication);
+        getJetBrainsApp(appName, projectFile, openByApplication);
     });
-}
 
-function openByApplication(error, application, project) {
+    function isProjectFile(file) {
+        const projectFilePatterns = [/pom\.xml/, /\.ipr/, /build\.xml/];
+        let isProjectFile = false;
 
-    if (error) {
-        console.error(error.stderr.error);
-        process.exit(error.code);
+        _.forEach(projectFilePatterns, pattern => isProjectFile = isProjectFile || pattern.test(file));
+
+        return isProjectFile;
     }
 
-    var filename = null;
-    if (application === '.idea') {
-        filename = directory;
-    } else {
-        filename = project || directory;
-    }
+    function openByApplication(error, application, project) {
 
-    execute('open -a "' + application + '" "' + filename + '"', common.dryRun, function(error, stdout) {
         if (error) {
             console.error(error.stderr.error);
             process.exit(error.code);
         }
-        console.log(stdout.info);
-    });
-}
 
-function getJetBrainsApp(appName, project, callback) {
-    console.log('opening with %s'.info, appName);
-    execute('ls -1d /Applications/' + appName + '* | tail -n1', function(error, application) {
-        if (error) callback(error);
+        let filename = null;
+        if (application === '.idea') {
+            filename = directory;
+        } else {
+            filename = project || directory;
+        }
 
-        application = application.replace(/\s+$/g, '');
-        callback(null, application, project);
-    });
-}
+        console.log(`opening with ${application}`);
+        execute(`open -a "${application}" "${filename}"`, (error, stdout) => {
+            if (error) {
+                console.error(error.stderr.error);
+                process.exit(error.code);
+            }
+            console.log(stdout);
+        });
+    }
 
-function execute(command, dryRun, callback) {
-    var args = [].slice.call(arguments);
-    command = args.shift();
-    callback = args.pop();
-    dryRun = args[0] || false;
+    function getJetBrainsApp(appName, project, callback) {
+        execute(`ls -1d /Applications/${appName}* | tail -n1`, (error, application) => {
+            if (error) callback(error);
 
-    var prefix = 'execute: '.debug;
-    if (dryRun) prefix = 'DRY_RUN '.warn + prefix;
+            application = application.replace(/\s+$/g, '');
+            callback(null, application, project);
+        });
+    }
 
-    //console.log(prefix + command);
-
-    if (!dryRun) {
-        var options = { cwd: process.cwd() };
-        exec(command, options, function(error, stdOut, stdErr) {
+    function execute(command, callback) {
+        const exec = require('child_process').exec;
+        const options = { cwd: process.cwd() };
+        exec(command, options, (error, stdOut, stdErr) => {
             if (error) {
                 error.stdout = stdOut;
                 error.stderr = stdErr;

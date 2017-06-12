@@ -1,28 +1,32 @@
 {
   "name": "jetbrains-open",
+  "author": "Rocky Gray <rocky.grayjr@gmail.com>",
   "version": "0.0.1",
   "description": "Open Jetbrains IDEs from the command line",
   "repository": {
     "type": "git",
-    "url": "https://github.com/grocky/jetbrains.git"
+    "url": "https://github.com/grocky/jetbrains"
   },
+  "bugs": {
+    "url": "https://github.com/grocky/jetbrains/issues"
+  },
+  "homepage": "https://github.com/grocky/jetbrains#readme",
   "os": [
     "!win32"
   ],
-  "main": "index.js",
+  "main": "distribution/index.js",
   "bin": {
-    "jetbrains": "index.js"
+    "jetbrains": "bin/jetbrains"
   },
   "scripts": {
-    "test": "mocha",
-    "build": "babel --presets es2015 -d out/ src/",
+    "test": "mocha --compilers js:babel-core/register tests/",
+    "build": "babel --out-dir distribution/ src/",
     "prepublish": "npm run build"
   },
   "keywords": [
     "jetbrains",
     "ide"
   ],
-  "author": "Rocky Gray <rocky.grayjr@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "6.24.1",
@@ -30,8 +34,8 @@
     "mocha": "^2.3.4"
   },
   "dependencies": {
-    "colors": "^1.1.2",
-    "commander": "^2.9.0",
-    "lodash": "^3.10.1"
+    "chalk": "^1.1",
+    "commander": "^2.0",
+    "lodash": "^4.0"
   }
 }

@@ -10,4 +10,4 @@ pids
 *.seed
 
 node_modules/
-out/
+distribution/
