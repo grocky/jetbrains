@@ -1,17 +1,18 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony
 'use strict';
 
-var commander = require('commander');
+const program = require('commander');
 
-var openJetbrainsIde = require('../src/index');
+const version = require('../package.json').version;
+const openJetbrainsIde = require('../distribution/index');
 
-var script = commander
-    .version('0.0.1')
-    .description('open a project using a JetBrains IDE')
+const script = program
     .arguments('[directory]')
+    .version(version)
+    .description('open a project using a JetBrains IDE')
     .parse(process.argv);
 
-var directory = script.args[0];
+let directory = script.args[0];
 
 if (typeof directory === 'undefined' || directory === '.') {
     directory = process.cwd();

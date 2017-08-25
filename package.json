@@ -1,7 +1,7 @@
 {
   "name": "jetbrains-open",
   "author": "Rocky Gray <rocky.grayjr@gmail.com>",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Open Jetbrains IDEs from the command line",
   "repository": {
     "type": "git",
@@ -36,6 +36,6 @@
   "dependencies": {
     "chalk": "^1.1",
     "commander": "^2.0",
-    "lodash": "^4.0"
+    "shelljs": "0.7.8"
   }
 }

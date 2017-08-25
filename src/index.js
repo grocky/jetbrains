@@ -1,45 +1,56 @@
-module.exports = openJetbrainsIde;
+import fs from 'fs';
+import sh from 'shelljs';
+import chalk from 'chalk';
 
 function openJetbrainsIde(directory) {
-
-    const _ = require('lodash');
-    const fs = require('fs');
-
-    const webStormFiles = ['package.json', 'bower.json', 'gulpfile.json', 'gruntfile.json'];
-    const phpStormFiles = ['composer.json'];
-
     fs.readdir(directory, (err, items) => {
-
-        const projectFile = _.find(items, isProjectFile);
-        const hasWebstormFiles = _.intersection(items, webStormFiles).length > 0;
-        const hasPhpStormFiles = _.intersection(items, phpStormFiles).length > 0;
+        const projectStat = items.reduce(
+            (acc, f) => ({
+                projectFile: acc.projectFile || (isProjectFile(f) ? f : null),
+                hasWebStormFiles: acc.hasWebStormFiles || isWebStormFile(f),
+                hasPhpStormFiles: acc.hasPhpStormFiles || isPhpStormFile(f)
+            }),
+            {
+                projectFile: null,
+                hasWebStormFiles: false,
+                hasPhpStormFiles: false,
+            }
+        );
 
         let appName = '';
-        if (hasPhpStormFiles) {
+        if (projectStat.hasPhpStormFiles) {
             appName = 'PhpStorm';
-        } else if (hasWebstormFiles) {
+        } else if (projectStat.hasWebStormFiles) {
             appName = 'WebStorm';
         } else {
             appName = 'IntelliJ';
         }
 
-        getJetBrainsApp(appName, projectFile, openByApplication);
+        getJetBrainsApp(appName, (err, application) => openByApplication(err, application, projectStat.projectFile));
     });
 
     function isProjectFile(file) {
         const projectFilePatterns = [/pom\.xml/, /\.ipr/, /build\.xml/];
         let isProjectFile = false;
 
-        _.forEach(projectFilePatterns, pattern => isProjectFile = isProjectFile || pattern.test(file));
+        projectFilePatterns.forEach(p => isProjectFile = isProjectFile || p.test(file));
 
         return isProjectFile;
+    }
+
+    function isWebStormFile(file) {
+        return ['package.json', 'bower.json', 'gulpfile.json', 'gruntfile.json'].includes(file);
+    }
+
+    function isPhpStormFile(file) {
+        return ['composer.json'].includes(file);
     }
 
     function openByApplication(error, application, project) {
 
         if (error) {
-            console.error(error.stderr.error);
-            process.exit(error.code);
+            console.error(chalk.bold.red(error.message));
+            process.exit(1);
         }
 
         let filename = null;
@@ -49,35 +60,25 @@ function openJetbrainsIde(directory) {
             filename = project || directory;
         }
 
-        console.log(`opening with ${application}`);
-        execute(`open -a "${application}" "${filename}"`, (error, stdout) => {
-            if (error) {
-                console.error(error.stderr.error);
-                process.exit(error.code);
+        console.log(chalk.green(`opening with ${application}`));
+        sh.exec(`open -a "${application}" "${filename}"`, (code, stdout, stderr) => {
+            if (code !== 0) {
+                console.error(chalk.bold.red(`${stdout}`));
+                console.error(chalk.bold.red(`${stderr}`));
+                sh.exit(code);
             }
-            console.log(stdout);
         });
     }
 
-    function getJetBrainsApp(appName, project, callback) {
-        execute(`ls -1d /Applications/${appName}* | tail -n1`, (error, application) => {
-            if (error) callback(error);
+    function getJetBrainsApp(appName, callback) {
+        const application = sh.ls('-d', `/Applications/${appName}*`).pop();
 
-            application = application.replace(/\s+$/g, '');
-            callback(null, application, project);
-        });
-    }
-
-    function execute(command, callback) {
-        const exec = require('child_process').exec;
-        const options = { cwd: process.cwd() };
-        exec(command, options, (error, stdOut, stdErr) => {
-            if (error) {
-                error.stdout = stdOut;
-                error.stderr = stdErr;
-                callback(error);
-            }
-            callback(null, stdOut);
-        });
+        if (!application) {
+            callback(new Error(`Unable to find ${appName} application`));
+        } else {
+            callback(null, application.trim());
+        }
     }
 }
+
+module.exports = openJetbrainsIde;
