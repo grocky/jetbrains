@@ -9,7 +9,11 @@ const openJetbrainsIde = require('../distribution/index');
 const script = program
     .arguments('[directory]')
     .version(version)
-    .description('open a project using a JetBrains IDE')
+    .description(`
+    open a project using a JetBrains IDE
+    
+    Available IDEs: ${openJetbrainsIde.availableIdes().join(', ')}
+    `)
     .parse(process.argv);
 
 let directory = script.args[0];

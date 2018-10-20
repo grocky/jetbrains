@@ -2,28 +2,39 @@ import fs from 'fs';
 import sh from 'shelljs';
 import chalk from 'chalk';
 
+const ides = {
+    phpStorm: 'PhpStorm',
+    webStorm: 'WebStorm',
+    intelliJ: 'IntelliJ',
+    goLand: 'GoLand',
+};
+
 function openJetbrainsIde(directory) {
     fs.readdir(directory, (err, items) => {
         const projectStat = items.reduce(
             (acc, f) => ({
                 projectFile: acc.projectFile || (isProjectFile(f) ? f : null),
                 hasWebStormFiles: acc.hasWebStormFiles || isWebStormFile(f),
-                hasPhpStormFiles: acc.hasPhpStormFiles || isPhpStormFile(f)
+                hasPhpStormFiles: acc.hasPhpStormFiles || isPhpStormFile(f),
+                hasGoLandFiles: acc.hasGoLandFiles || isGolandFile(f)
             }),
             {
                 projectFile: null,
                 hasWebStormFiles: false,
                 hasPhpStormFiles: false,
+                hasGoLandFiles: false,
             }
         );
 
         let appName = '';
         if (projectStat.hasPhpStormFiles) {
-            appName = 'PhpStorm';
+            appName = ides.phpStorm;
         } else if (projectStat.hasWebStormFiles) {
-            appName = 'WebStorm';
+            appName = ides.webStorm;
+        } else if (projectStat.hasGoLandFiles) {
+            appName = ides.goLand;
         } else {
-            appName = 'IntelliJ';
+            appName = ides.intelliJ;
         }
 
         getJetBrainsApp(appName, (err, application) => openByApplication(err, application, projectStat.projectFile));
@@ -44,6 +55,10 @@ function openJetbrainsIde(directory) {
 
     function isPhpStormFile(file) {
         return ['composer.json'].includes(file);
+    }
+
+    function isGolandFile(file) {
+        return ['go.mod', 'main.go', 'Gopkg.lock'].includes(file);
     }
 
     function openByApplication(error, application, project) {
@@ -80,5 +95,7 @@ function openJetbrainsIde(directory) {
         }
     }
 }
+
+openJetbrainsIde.availableIdes = () => Object.keys(ides).map(k => ides[k]);
 
 module.exports = openJetbrainsIde;
