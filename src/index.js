@@ -7,6 +7,7 @@ const ides = {
     webStorm: 'WebStorm',
     intelliJ: 'IntelliJ',
     goLand: 'GoLand',
+    cLion: 'CLion',
 };
 
 function openJetbrainsIde(directory) {
@@ -16,13 +17,15 @@ function openJetbrainsIde(directory) {
                 projectFile: acc.projectFile || (isProjectFile(f) ? f : null),
                 hasWebStormFiles: acc.hasWebStormFiles || isWebStormFile(f),
                 hasPhpStormFiles: acc.hasPhpStormFiles || isPhpStormFile(f),
-                hasGoLandFiles: acc.hasGoLandFiles || isGolandFile(f)
+                hasGoLandFiles: acc.hasGoLandFiles || isGolandFile(f),
+                hasCLionFiles: acc.hasCLionFiles || isCLionFile(f),
             }),
             {
                 projectFile: null,
                 hasWebStormFiles: false,
                 hasPhpStormFiles: false,
                 hasGoLandFiles: false,
+                hasCLionFiles: false,
             }
         );
 
@@ -33,6 +36,8 @@ function openJetbrainsIde(directory) {
             appName = ides.webStorm;
         } else if (projectStat.hasGoLandFiles) {
             appName = ides.goLand;
+        } else if (projectStat.hasCLionFiles) {
+            appName = ides.cLion;
         } else {
             appName = ides.intelliJ;
         }
@@ -59,6 +64,10 @@ function openJetbrainsIde(directory) {
 
     function isGolandFile(file) {
         return ['go.mod', 'main.go', 'Gopkg.lock'].includes(file);
+    }
+
+    function isCLionFile(file) {
+        return ['platformio.ini'].includes(file);
     }
 
     function openByApplication(error, application, project) {
