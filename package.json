@@ -21,7 +21,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-core/register tests/",
     "build": "babel --out-dir distribution/ src/",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "keywords": [
     "jetbrains",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "babel-cli": "6.24.1",
     "babel-preset-es2015": "6.24.1",
-    "mocha": "^2.3.4"
+    "mocha": "6.2.1"
   },
   "dependencies": {
     "chalk": "^1.1",
