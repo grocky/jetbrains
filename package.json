@@ -14,26 +14,23 @@
   "os": [
     "!win32"
   ],
-  "main": "dist/src/jetbrains.js",
+  "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "bin": {
     "jetbrains": "dist/src/index.js"
   },
-  "files": [
-    "dist/**/*",
-    "README.md"
-  ],
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "test": "npm run lint && npm run test:unit && npm run test:coverage",
-    "test:unit": "mocha",
-    "test:coverage": "nyc mocha",
+    "build": "npm run clean && tsc -p .",
+    "build:check": "tsc --noEmit",
+    "clean": "rm -rf dist",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",
-    "build": "tsc",
-    "build:check": "tsc --noEmit",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "start": "ts-node src/index.ts",
+    "test": "npm run lint && npm run test:unit && npm run test:coverage",
+    "test:coverage": "nyc mocha",
+    "test:unit": "mocha"
   },
   "nyc": {
     "extension": [
