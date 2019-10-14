@@ -1,7 +1,7 @@
 {
   "name": "jetbrains-open",
   "author": "Rocky Gray <rocky.grayjr@gmail.com>",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Open Jetbrains IDEs from the command line",
   "repository": {
     "type": "git",
