@@ -14,8 +14,8 @@
   "os": [
     "!win32"
   ],
-  "main": "dist/jetbrains.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/jetbrains.js",
+  "types": "dist/src/index.d.ts",
   "bin": {
     "jetbrains": "dist/src/index.js"
   },
