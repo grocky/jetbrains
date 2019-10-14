@@ -1,0 +1,20 @@
+### Node template
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+node_modules/
+!dist/
+coverage
+.nyc_output
+.idea/
+.prettierrc
+/ts*
+.circleci
+test/
