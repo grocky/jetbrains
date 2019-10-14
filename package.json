@@ -20,8 +20,8 @@
     "jetbrains": "dist/src/index.js"
   },
   "files": [
-    "bin",
-    "dist/**/*"
+    "dist/**/*",
+    "README.md"
   ],
   "scripts": {
     "start": "ts-node src/index.ts",
