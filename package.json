@@ -25,10 +25,12 @@
   ],
   "scripts": {
     "start": "ts-node src/index.ts",
-    "test": "mocha --require ts-node/register tests/**/*.spec.ts",
-    "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
+    "test": "npm run lint && npm run test:unit && npm run test:coverage",
+    "test:unit": "mocha --require ts-node/register tests/**/*.spec.ts",
+    "test:coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
+    "lint:fix": "tslint -p tsconfig.json --fix",
     "build": "tsc",
     "build:check": "tsc --noEmit",
     "prepare": "npm run build"
@@ -54,7 +56,7 @@
   },
   "dependencies": {
     "chalk": "2.4.2",
-    "commander": "^2.0",
+    "commander": "2.20.3",
     "shelljs": "0.7.8"
   }
 }

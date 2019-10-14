@@ -11,7 +11,7 @@ export interface IDETarget {
     target: string | null;
 }
 
-interface ProjectStat {
+interface IProjectStat {
   projectFile: string | null;
   hasWebStormFiles: boolean;
   hasPhpStormFiles: boolean;
@@ -21,11 +21,11 @@ interface ProjectStat {
 
 const isProjectFile = (file: string): boolean => {
   const projectFilePatterns = [/pom\.xml/, /\.ipr/, /build\.xml/, /\.idea/];
-  let isProjectFile = false;
+  let isMatching = false;
 
-  projectFilePatterns.forEach(p => (isProjectFile = isProjectFile || p.test(file)));
+  projectFilePatterns.forEach(p => (isMatching = isMatching || p.test(file)));
 
-  return isProjectFile;
+  return isMatching;
 };
 
 const isWebStormFile = (file: string): boolean =>
@@ -53,25 +53,25 @@ const isCLionFile = (file: string): boolean =>
     'platformio.ini'
   ].includes(file);
 
-const reduceProjectFiles = (files: string[]): ProjectStat =>
+const reduceProjectFiles = (files: string[]): IProjectStat =>
   files.reduce(
-      (acc: ProjectStat, f: string) => ({
-        projectFile: acc.projectFile || (isProjectFile(f) ? f : null),
-        hasWebStormFiles: acc.hasWebStormFiles || isWebStormFile(f),
-        hasPhpStormFiles: acc.hasPhpStormFiles || isPhpStormFile(f),
-        hasGoLandFiles: acc.hasGoLandFiles || isGoLandFile(f),
+      (acc: IProjectStat, f: string) => ({
         hasCLionFiles: acc.hasCLionFiles || isCLionFile(f),
+        hasGoLandFiles: acc.hasGoLandFiles || isGoLandFile(f),
+        hasPhpStormFiles: acc.hasPhpStormFiles || isPhpStormFile(f),
+        hasWebStormFiles: acc.hasWebStormFiles || isWebStormFile(f),
+        projectFile: acc.projectFile || (isProjectFile(f) ? f : null),
       }),
       {
-        projectFile: null,
-        hasWebStormFiles: false,
-        hasPhpStormFiles: false,
-        hasGoLandFiles: false,
         hasCLionFiles: false,
+        hasGoLandFiles: false,
+        hasPhpStormFiles: false,
+        hasWebStormFiles: false,
+        projectFile: null,
       },
   );
 
-const convertProjectFilesToAppName = (projectFiles: ProjectStat): IDEs => {
+const convertProjectFilesToAppName = (projectFiles: IProjectStat): IDEs => {
     if (projectFiles.hasPhpStormFiles) {
         return IDEs.PHPStorm;
     } else if (projectFiles.hasGoLandFiles) {
@@ -94,4 +94,4 @@ export const determineJetbrainsIDE = (projectFiles: string[]): IDETarget => {
   };
 };
 
-export const availableIdes = (): String[] => Object.values(IDEs);
+export const availableIdes = (): string[] => Object.values(IDEs);
