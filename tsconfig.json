@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "sourceMap": true,
+    "module": "commonjs",
+    "lib": ["es6", "es2015"],
+    "types": ["node"],
+    "declaration": true,
+    "outDir": "distribution",
+    "strict": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "distribution",
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
