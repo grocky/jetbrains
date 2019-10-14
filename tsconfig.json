@@ -6,7 +6,7 @@
     "lib": ["es6", "es2015"],
     "types": ["node"],
     "declaration": true,
-    "outDir": "distribution",
+    "outDir": "dist",
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
@@ -16,7 +16,7 @@
     "src"
   ],
   "exclude": [
-    "distribution",
+    "dist",
     "node_modules",
     "**/*.spec.ts"
   ]

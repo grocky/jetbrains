@@ -14,14 +14,14 @@
   "os": [
     "!win32"
   ],
-  "main": "distribution/jetbrains.js",
-  "types": "distribution/index.d.ts",
+  "main": "dist/jetbrains.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "jetbrains": "distribution/index.js"
+    "jetbrains": "dist/src/index.js"
   },
   "files": [
-    "bin",
-    "distribution/**/*"
+    "dist/**/*",
+    "README.md"
   ],
   "scripts": {
     "start": "ts-node src/index.ts",
