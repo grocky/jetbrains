@@ -10,6 +10,6 @@ pids
 *.seed
 
 node_modules/
-distribution/
+dist/
 coverage
 .nyc_output
