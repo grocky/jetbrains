@@ -24,7 +24,8 @@
     "distribution/**/*"
   ],
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+    "start": "ts-node src/index.ts",
+    "test": "mocha --require ts-node/register tests/**/*.spec.ts",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",

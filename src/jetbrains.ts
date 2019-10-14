@@ -74,12 +74,12 @@ const reduceProjectFiles = (files: string[]): ProjectStat =>
 const convertProjectFilesToAppName = (projectFiles: ProjectStat): IDEs => {
     if (projectFiles.hasPhpStormFiles) {
         return IDEs.PHPStorm;
-    } else if (projectFiles.hasWebStormFiles) {
-        return IDEs.WebStorm;
     } else if (projectFiles.hasGoLandFiles) {
         return IDEs.GoLand;
     } else if (projectFiles.hasCLionFiles) {
         return IDEs.CLion;
+    } else if (projectFiles.hasWebStormFiles) {
+        return IDEs.WebStorm;
     } else {
         return IDEs.IntelliJ;
     }
