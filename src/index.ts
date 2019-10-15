@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import Debug from 'debug';
 import chalk from 'chalk';
 import program from 'commander';
+import Debug from 'debug';
 import fs from 'fs';
 import shelljs from 'shelljs';
 
